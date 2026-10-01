@@ -1,0 +1,67 @@
+name: Release plugin package
+
+on:
+  push:
+    tags:
+      - 'podwise--v*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve and verify version
+        id: version
+        run: |
+          set -euo pipefail
+          TAG="${GITHUB_REF_NAME}"
+          VERSION="${TAG#podwise--v}"
+          if [ -z "$VERSION" ] || [ "$VERSION" = "$TAG" ]; then
+            echo "Unexpected tag format: $TAG" >&2
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+          for f in plugin.json .claude-plugin/plugin.json .codex-plugin/plugin.json; do
+            v="$(jq -r '.version' "$f")"
+            if [ "$v" != "$VERSION" ]; then
+              echo "$f version ($v) != tag ($VERSION)" >&2
+              exit 1
+            fi
+          done
+
+          skill_ver="$(grep -m1 '^version:' skills/podwise/SKILL.md | sed 's/^version:[[:space:]]*//')"
+          if [ "$skill_ver" != "$VERSION" ]; then
+            echo "SKILL.md version ($skill_ver) != tag ($VERSION)" >&2
+            exit 1
+          fi
+
+      - name: Build ZIP
+        run: |
+          set -euo pipefail
+          ZIP="podwise-${{ steps.version.outputs.version }}.zip"
+          git archive --format=zip --output="$ZIP" "$GITHUB_REF_NAME"
+          echo "ZIP=$ZIP" >> "$GITHUB_ENV"
+          unzip -l "$ZIP"
+
+      - name: Upload workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: podwise-${{ steps.version.outputs.version }}
+          path: ${{ env.ZIP }}
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh release create "$GITHUB_REF_NAME" "$ZIP" \
+            --title "Podwise ${{ steps.version.outputs.version }}" \
+            --generate-notes
