@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "podwise": {
+      "type": "http",
+      "url": "https://mcp.podwise.ai/mcp"
+    }
+  }
+}

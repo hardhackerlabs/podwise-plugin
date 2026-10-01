@@ -1,0 +1,17 @@
+{
+  "name": "podwise",
+  "version": "1.0.0",
+  "description": "Search, summarize, transcribe and extract insights from podcasts via the Podwise MCP server.",
+  "skills": "./skills/",
+  "mcpServers": "./mcp.json",
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Podwise",
+        "shortDescription": "Search, summarize and learn from podcasts.",
+        "logo": "./assets/logo.png",
+        "category": "Productivity"
+      }
+    }
+  }
+}

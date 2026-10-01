@@ -1,0 +1,19 @@
+{
+  "name": "podwise",
+  "owner": {
+    "name": "Podwise"
+  },
+  "metadata": {
+    "description": "Podwise plugins for Claude Code — podcast transcripts, summaries and workflows powered by the Podwise MCP server."
+  },
+  "plugins": [
+    {
+      "name": "podwise",
+      "source": "./plugins/podwise",
+      "description": "Search, summarize, transcribe and extract insights from podcasts via the Podwise MCP server.",
+      "version": "1.0.0",
+      "category": "productivity",
+      "keywords": ["podcast", "transcript", "summary", "mcp"]
+    }
+  ]
+}

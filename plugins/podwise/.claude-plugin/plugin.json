@@ -1,0 +1,15 @@
+{
+  "name": "podwise",
+  "displayName": "Podwise",
+  "version": "1.0.0",
+  "description": "Search, summarize, transcribe and extract insights from podcasts via the Podwise MCP server.",
+  "author": {
+    "name": "Podwise",
+    "url": "https://podwise.ai"
+  },
+  "homepage": "https://podwise.ai",
+  "repository": "https://github.com/hardhackerlabs/podwise-plugin",
+  "license": "MIT",
+  "keywords": ["podcast", "transcript", "summary", "mcp"],
+  "mcpServers": "./.mcp.json"
+}

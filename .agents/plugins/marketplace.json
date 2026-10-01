@@ -1,0 +1,20 @@
+{
+  "name": "podwise",
+  "interface": {
+    "displayName": "Podwise"
+  },
+  "plugins": [
+    {
+      "name": "podwise",
+      "source": {
+        "source": "local",
+        "path": "./plugins/podwise"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
