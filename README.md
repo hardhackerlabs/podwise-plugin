@@ -82,7 +82,8 @@ podwise-plugin/
 ├── .agents/plugins/marketplace.json     # Codex marketplace
 └── plugins/podwise/
     ├── .claude-plugin/plugin.json       # Claude Code plugin manifest
-    ├── plugin.json                      # Portable Agent Plugins manifest (Codex)
+    ├── .codex-plugin/plugin.json        # Codex / ChatGPT client manifest
+    ├── plugin.json                      # Portable Agent Plugins manifest
     ├── mcp.json / .mcp.json             # Remote MCP server config (identical)
     ├── skills/podwise/                  # The Podwise skill
     │   ├── SKILL.md

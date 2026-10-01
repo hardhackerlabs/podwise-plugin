@@ -1,0 +1,34 @@
+{
+  "name": "podwise",
+  "version": "1.0.0",
+  "description": "Search, summarize, transcribe and extract insights from podcasts via the Podwise MCP server.",
+  "author": {
+    "name": "Podwise",
+    "url": "https://podwise.ai"
+  },
+  "homepage": "https://podwise.ai",
+  "repository": "https://github.com/hardhackerlabs/podwise-plugin",
+  "license": "MIT",
+  "keywords": ["podcast", "transcript", "summary", "mcp"],
+  "skills": "./skills/",
+  "mcpServers": "./.mcp.json",
+  "interface": {
+    "displayName": "Podwise",
+    "shortDescription": "Search and summarize podcasts",
+    "longDescription": "Podwise turns podcast episodes into transcripts, summaries, chapters, Q&A, mind maps and clips. This plugin bundles the Podwise agent skill with the remote Podwise MCP server, so you can catch up on your backlog, generate weekly recaps, research topics across shows, export episode notes to your PKM, and build language-learning cards — all from natural language.",
+    "developerName": "Podwise",
+    "category": "Productivity",
+    "websiteURL": "https://podwise.ai",
+    "privacyPolicyURL": "https://podwise.ai/privacy",
+    "termsOfServiceURL": "https://podwise.ai/terms",
+    "supportURL": "https://docs.podwise.ai",
+    "brandColor": "#7948E8",
+    "logo": "./assets/logo.png",
+    "composerIcon": "./assets/composer-icon.png",
+    "defaultPrompt": [
+      "Catch me up on this week's podcast episodes",
+      "Summarize this podcast episode",
+      "Research what podcasts say about a topic"
+    ]
+  }
+}
