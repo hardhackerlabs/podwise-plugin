@@ -13,7 +13,7 @@ Use this skill to expand the user's podcast world beyond their existing subscrip
 
 ## Step 1: Check the Environment
 
-Call `get_me`. If the Podwise tools are unavailable or return an authentication error, stop and follow [references/installation.md](references/installation.md) before continuing.
+Call `get_me`. If the Podwise tools are unavailable or return an authentication error, stop and follow [../references/installation.md](../references/installation.md) before continuing.
 
 ## Step 2: Load the Listener Taste
 
@@ -56,6 +56,8 @@ Use `ask_podwise` to find podcast content on topics *adjacent* to what the user 
 
 - `ask_podwise` with a question such as `"podcasts about {adjacent topic}"`.
 
+`ask_podwise` counts against the user's Ask quota and can take up to 60 seconds — do not cancel early.
+
 The answer includes cited source clips with episode seqs. Choose 1–2 adjacent topics by reasoning from the taste profile:
 - If the user follows AI podcasts, an adjacent topic might be "cognitive science" or "the history of computing"
 - If they follow investing podcasts, adjacent might be "economic history" or "behavioural psychology"
@@ -72,13 +74,14 @@ If the user explicitly asked for shows or episodes about a specific topic, use s
 
 ## Step 5: Filter and Score Candidates
 
-Silently filter the candidate pool using the whitelist:
+Build the already-followed whitelist from two sources:
 
-- `list_followed_podcasts` with `days: 30` — the shows the user already follows.
+- `list_followed_podcasts` with `days: 30` — shows the user follows that published recently. **This only covers recently active shows, not the full follow list.**
+- The **Subscribed Podcasts** section of `taste.md`, if loaded — use this to catch follows the tool missed.
 
 Filter rules in order:
 
-1. **Remove already-followed shows**: cross-reference every candidate podcast against the followed-shows whitelist. Drop any show the user already follows.
+1. **Remove already-followed shows**: cross-reference every candidate podcast against the whitelist. Drop any show the user already follows. If `taste.md` is not loaded, note that the whitelist may be incomplete because `list_followed_podcasts` omits shows with no recent episodes.
 2. **Remove Shows to Prioritize**: drop any show that appears in the user's **Shows to Prioritize** list — these are shows they already engage with regularly.
 3. **Remove Shows to Deprioritize**: drop any show that appears in the user's **Shows to Deprioritize** list — these are shows the user has consciously deprioritised.
 4. **Remove format mismatches**: if the user expressed a format preference in Step 3, drop episodes or shows that do not match (e.g. drop daily news shows if the user prefers long-form).

@@ -167,7 +167,7 @@ The full transcript with timestamps and speakers, paginated by segment.
 
 Prefer `get_episode_summary` unless exact wording or quotes are needed. Transcripts are token-intensive.
 
-> The remote server does not export SRT/VTT. If a subtitle file is required, construct it from the timestamped transcript segments.
+> For a subtitle file, use `export_episode_srt` (see Export below) instead of rebuilding one from segments.
 
 ---
 
@@ -211,6 +211,7 @@ List the translations of an episode and the status of each. Poll this, then read
 ### Export
 
 - `export_episode_markdown` — summary, outline, and transcript of a transcribed episode as Markdown. `seq`; optional `language`, `dialect` (`common` | `obsidian` | `logseq`), `mixOutlines`, `mixWithOriginLanguage`. Returns the note text — the agent writes the file to disk.
+- `export_episode_srt` — transcript of a transcribed episode as SRT subtitles. `seq`; optional `language` (translation), `mixWithOriginLanguage` (bilingual: keep the original alongside the translation), `translationFirst` (bilingual only: put the translation above the original). Short exports return inline; long ones return a download link valid for 10 minutes — share it with the user.
 - `send_episode` — send summary and notes to `notion` or `reader` (`target`). Optional `language`, `mixOutlines`, `mixWithOriginLanguage`; Reader-only: `location` (`new` | `later` | `archive`), `shownotes`, `mindmap`; Notion-only: `transcripts` (default true).
 
 Integration must already be connected in Podwise settings.
@@ -260,6 +261,7 @@ Integration must already be connected in Podwise settings.
 | Translate an episode | `translate_episode` → `list_episode_translations` |
 | Export episode notes to Notion / Readwise | `send_episode` |
 | Export episode notes as Markdown / Obsidian / Logseq | `export_episode_markdown` |
+| Export subtitles as SRT | `export_episode_srt` |
 | List my clips for an episode | `list_clips` |
 | Export clips to Markdown | `export_clips_markdown` |
 | Send clips to Readwise / Notion | `send_clips` |
@@ -272,7 +274,7 @@ Integration must already be connected in Podwise settings.
 - **`get_episode_summary` says "not processed"**: run `process_episode` first (confirm — credits are consumed).
 - **"Pro or Enterprise plan required"**: report it and relay the upgrade link. Do not retry or fabricate output.
 - **`ask_podwise` returns a quota error**: report it directly. Do not fabricate an answer.
-- **SRT/VTT requested**: not supported by the remote server — build the subtitle from timestamped transcript segments.
+- **SRT export returns a download link**: long transcripts are not sent inline — share the link with the user (valid for 10 minutes).
 - **`process_episode` / `complete_audio_upload` run without confirmation**: always wrong — both consume quota.
 - **URL passed where a seq is expected**: extract the trailing integer from the URL first.
 - **`send_episode` / `send_clips` fail**: the Notion / Readwise integration is not connected in Podwise settings.

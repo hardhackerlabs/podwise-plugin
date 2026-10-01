@@ -12,7 +12,7 @@ Use this skill to construct a `taste.md` file that captures the user's podcast t
 
 ## Step 1: Check the Environment
 
-Call `get_me`. If the Podwise tools are unavailable or return an authentication error, stop and follow [references/installation.md](references/installation.md) before continuing.
+Call `get_me`. If the Podwise tools are unavailable or return an authentication error, stop and follow [../references/installation.md](../references/installation.md) before continuing.
 
 ## Step 2: Gather Data
 
@@ -96,7 +96,7 @@ After writing the file:
 
 1. Print the full path where `taste.md` was saved.
 2. Show the user a brief summary of what was captured: number of subscribed shows, core interest areas, and PKM tool detected.
-3. Tell the user which skills will read this file automatically: `catch-up`, `weekly-recap`, `discover`, `topic-research`, and `episode-debate`.
+3. Tell the user which skills will read this file automatically: `catch-up`, `weekly-recap`, `discover`, `topic-research`, `episode-debate`, `episode-notes`, and `language-learning`.
 4. Suggest re-running this skill if their listening habits change significantly.
 
 ## Common Failure Cases

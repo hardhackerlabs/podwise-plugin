@@ -13,7 +13,7 @@ Use this skill to turn passive listening into active thinking. It extracts the s
 
 ## Step 1: Check the Environment
 
-Call `get_me`. If the Podwise tools are unavailable or return an authentication error, stop and follow [references/installation.md](references/installation.md) before continuing.
+Call `get_me`. If the Podwise tools are unavailable or return an authentication error, stop and follow [../references/installation.md](../references/installation.md) before continuing.
 
 ## Step 2: Load the Listener Taste
 
@@ -28,6 +28,7 @@ The user may provide the episode as:
 
 - A Podwise episode URL: `https://app.podwise.ai/dashboard/episodes/{seq}` — extract the trailing integer as `seq`.
 - A YouTube or Xiaoyuzhou URL (process first; see Step 4).
+- A local audio or video file path (process first; see Step 4).
 - An episode title or keyword — search first:
 
   - `search_episodes` with `query: "{title or keyword}"`.
@@ -48,6 +49,7 @@ Only after explicit confirmation:
 
 - YouTube / Xiaoyuzhou: `import_episode` to get a `seq`, then `process_episode`.
 - Podwise episode: `process_episode` with the `seq`.
+- Local file: `start_audio_upload` → upload bytes to the returned `uploadUrl` (or hand the `browserUploadUrl` to the user) → `complete_audio_upload` (supported types: `.mp3 .wav .m4a .mp4 .m4v .mov .webm`).
 
 Then poll `get_episode` until done and re-run `get_episode_summary`.
 

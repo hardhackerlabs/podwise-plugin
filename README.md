@@ -4,7 +4,7 @@
 [![Codex](https://img.shields.io/badge/Codex-plugin-000000)](https://developers.openai.com/codex)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 
-Turn podcast episodes into AI-powered insights from inside Claude Code and Codex. This plugin bundles the **Podwise Agent Skill** with the **remote Podwise MCP server** (`https://mcp.podwise.ai/mcp`), so installing the plugin wires everything up — no CLI, no local server.
+Turn podcast episodes into AI-powered insights from inside Claude Code and Codex. This plugin bundles the **Podwise Agent Skill** with the **remote Podwise MCP server** (`https://mcp.podwise.ai/mcp`), so installing the plugin wires everything up.
 
 Podwise transforms hours of audio into transcripts, summaries, outlines, Q&A, mind maps and clips. The skill teaches your agent how to combine those tools into repeatable workflows.
 
@@ -45,9 +45,10 @@ Then authenticate the MCP server when prompted (OAuth runs in your browser via `
 
 ```
 codex plugin marketplace add hardhackerlabs/podwise-plugin
+codex plugin add podwise@podwise
 ```
 
-Then install **Podwise** from the Plugins Directory and complete the OAuth flow.
+Then complete the OAuth flow when prompted.
 
 ### Other agents (skills only)
 
@@ -77,27 +78,30 @@ Then add this to your MCP configuration:
 ## Repository layout
 
 ```
-podwise-plugin/
-├── .claude-plugin/marketplace.json      # Claude Code marketplace
-├── .agents/plugins/marketplace.json     # Codex marketplace
-└── plugins/podwise/
-    ├── .claude-plugin/plugin.json       # Claude Code plugin manifest
-    ├── .codex-plugin/plugin.json        # Codex / ChatGPT client manifest
-    ├── plugin.json                      # Portable Agent Plugins manifest
-    ├── mcp.json / .mcp.json             # Remote MCP server config (identical)
-    ├── skills/podwise/                  # The Podwise skill
-    │   ├── SKILL.md
-    │   ├── references/
-    │   ├── workflows/
-    │   └── agents/openai.yaml
-    └── assets/
+podwise-plugin/                            # this repository is the plugin (source: "./")
+├── .claude-plugin/
+│   ├── marketplace.json                   # Claude Code marketplace
+│   └── plugin.json                        # Claude Code plugin manifest
+├── .codex-plugin/plugin.json              # Codex / ChatGPT client manifest
+├── .cursor-plugin/
+│   ├── marketplace.json                   # Cursor marketplace
+│   └── plugin.json                        # Cursor plugin manifest
+├── .agents/plugins/marketplace.json       # Codex marketplace
+├── plugin.json                            # Portable Agent Plugins manifest
+├── mcp.json / .mcp.json                   # Remote MCP server config
+├── skills/podwise/                        # The Podwise skill
+│   ├── SKILL.md
+│   ├── references/
+│   ├── workflows/
+│   └── agents/openai.yaml
+└── assets/
 ```
 
-The MCP definition is intentionally duplicated as `mcp.json` (portable / Codex) and `.mcp.json` (Claude Code default). Keep the two files identical.
+The MCP definition is duplicated as `mcp.json` (portable / Codex, `streamable-http`) and `.mcp.json` (Claude Code, `http`). Keep the transport type matching each platform.
 
 ## Brand assets
 
-Directory listings use two square images declared in `plugins/podwise/plugin.json` under `extensions.com.openai.interface`:
+Directory listings use two square images declared in `plugin.json` under `extensions.com.openai.interface`:
 
 | Asset | File | Size | Notes |
 | --- | --- | --- | --- |

@@ -12,7 +12,7 @@ Use this skill to turn a week of scattered podcast listening into one coherent d
 
 ## Step 1: Check the Environment
 
-Call `get_me`. If the Podwise tools are unavailable or return an authentication error, stop and follow [references/installation.md](references/installation.md) before continuing.
+Call `get_me`. If the Podwise tools are unavailable or return an authentication error, stop and follow [../references/installation.md](../references/installation.md) before continuing.
 
 ## Step 2: Load the Listener Taste
 
@@ -36,7 +36,7 @@ Fetch from two sources:
 
 Parse each entry for: podcast name, episode title, publication date, and episode seq.
 
-Then apply a secondary filter: keep only episodes whose publication date falls within the recap window (last 7 days). This ensures every entry in the recap represents something the user actually encountered this week, not just something new that was published.
+`list_my_episodes` returns the user's most recent play/read activity, newest first. Keep the episodes the user actually played or read within the recap window, regardless of the episode's original publication date — an older episode listened to this week still belongs in the recap. If the window is longer than the tool's recent-activity range, page through with `page` until entries fall outside the window.
 
 **Fallback**: If the combined result after filtering is fewer than 5 episodes, supplement with:
 
@@ -50,7 +50,7 @@ For each episode that made it through the Step 4 filter, call `get_episode_summa
 
 If it fails for an episode because it has not been processed yet, include it in the recap with its podcast name, episode title, and a note: "not yet processed — [Open episode]({url})". This gives the user enough context to decide whether to process it manually.
 
-**Silently record** every episode in the Step 4 history results that did not make it into the Part 1 recap (episodes beyond the top entries or from older weeks). These go into an "Also in your history this week" section at the bottom of the recap — title, podcast name, and date only, no additional tool calls.
+**Silently record** every episode returned by `list_my_episodes` that did not make it into the Part 1 recap (activity outside the recap window, or entries that didn't make the cut). These go into an "Also in your history" section at the bottom of the recap — title, podcast name, and date only, no additional tool calls.
 
 Do not call `process_episode` automatically during a recap.
 
@@ -150,9 +150,9 @@ Highlights:
 
 ---
 
-### Also in Your History This Week
+### Also in Your History
 
-*{N} additional episodes from your history that were outside the 7-day window or didn't make the recap cut:*
+*{N} additional episodes from your history that were outside this recap's window or didn't make the cut:*
 
 - **{Episode Title}** · {Podcast Name} · {date}
 - **{Episode Title}** · {Podcast Name} · {date}
@@ -189,7 +189,7 @@ Tell the user clearly that the recap file is the handoff.
 
 Produce exactly one recap document per run with three main sections: episodes, themes, and worth revisiting.
 
-A fourth section ("Also in your history this week") is added whenever there are recorded history entries that did not make the episode list.
+A fourth section ("Also in your history") is added whenever there are recorded history entries that did not make the episode list.
 
 The themes section may be omitted only when there is genuinely no cross-episode material.
 

@@ -10,7 +10,7 @@ metadata:
 
 # Podwise
 
-Podwise skills help you get more out of every podcast you listen to. All capabilities are reached through the **Podwise MCP server** — there is no CLI to install.
+Podwise skills help you get more out of every podcast you listen to. All capabilities are reached through the **Podwise MCP server**.
 
 ## References
 
@@ -130,6 +130,8 @@ Some requests can be handled directly with a single MCP tool call without loadin
 - Follow or unfollow a podcast — `set_podcast_follow`
 - Search for an episode or podcast by name — `search_episodes` / `search_podcasts`
 - Check what's trending — `get_popular_episodes`
+- See new episodes from followed shows — `list_followed_episodes`
 - Browse listening or reading history — `list_my_episodes`
 - Fetch a specific artifact from an episode — `get_episode_summary` / `get_episode_transcript`
+- Export an episode as Markdown, subtitles, or to a PKM — `export_episode_markdown` / `export_episode_srt` / `send_episode`
 - Ask a one-off question from transcripts — `ask_podwise`

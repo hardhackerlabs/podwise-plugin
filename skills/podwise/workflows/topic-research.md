@@ -13,7 +13,7 @@ Use this skill to answer the question: *what do podcasts actually say about X?* 
 
 ## Step 1: Check the Environment
 
-Call `get_me`. If the Podwise tools are unavailable or return an authentication error, stop and follow [references/installation.md](references/installation.md) before continuing.
+Call `get_me`. If the Podwise tools are unavailable or return an authentication error, stop and follow [../references/installation.md](../references/installation.md) before continuing.
 
 ## Step 2: Load the Listener Taste
 

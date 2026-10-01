@@ -13,13 +13,13 @@ Use this skill to mine a podcast transcript for language learning material. It p
 
 ## Step 1: Check the Environment
 
-Call `get_me`. If the Podwise tools are unavailable or return an authentication error, stop and follow [references/installation.md](references/installation.md) before continuing.
+Call `get_me`. If the Podwise tools are unavailable or return an authentication error, stop and follow [../references/installation.md](../references/installation.md) before continuing.
 
 ## Step 2: Load the Listener Taste
 
 Look for `taste.md` in the current working directory.
 
-- If found, read the **Languages** field silently. Use the learning language and native language to pre-fill Step 4 questions and skip any that are already known.
+- If found, read the **Languages** field under **Listening Style** silently. Use the learning language and native language to pre-fill Step 4 questions and skip any that are already known.
 - If found, also read **Output Preferences** to shape the default delivery format recommendation in Step 8.
 - If not found, ask all setup questions in full.
 

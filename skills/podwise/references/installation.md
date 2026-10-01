@@ -11,7 +11,7 @@ Podwise runs as a remote MCP server at:
 https://mcp.podwise.ai/mcp
 ```
 
-It authenticates with **OAuth 2.0** — no API key or token is stored anywhere. There is no CLI or local server to install.
+It authenticates with **OAuth 2.0** — no API key or token is stored anywhere.
 
 ## If you installed the plugin
 

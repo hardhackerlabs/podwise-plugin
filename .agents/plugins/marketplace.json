@@ -7,8 +7,8 @@
     {
       "name": "podwise",
       "source": {
-        "source": "local",
-        "path": "./plugins/podwise"
+        "source": "url",
+        "url": "https://github.com/hardhackerlabs/podwise-plugin.git"
       },
       "policy": {
         "installation": "AVAILABLE",

@@ -13,7 +13,7 @@ Use this skill to turn a single processed episode into a well-structured, portab
 
 ## Step 1: Check the Environment
 
-Call `get_me`. If the Podwise tools are unavailable or return an authentication error, stop and follow [references/installation.md](references/installation.md) before continuing.
+Call `get_me`. If the Podwise tools are unavailable or return an authentication error, stop and follow [../references/installation.md](../references/installation.md) before continuing.
 
 ## Step 2: Load the Listener Taste
 
@@ -71,7 +71,11 @@ Optionally fetch the transcript if the user specifically requested it or if thei
 
 Do not include the full transcript in the note by default — it is too long for most PKM use cases. Offer it as a separate file if the user wants it.
 
+If the user asked for subtitles, call `export_episode_srt` with the episode `seq` instead of building SRT from transcript segments. Short files return inline; long ones return a download link valid for 10 minutes — share the link.
+
 ## Step 6: Assemble the Note
+
+**Rendering options:** The server can render a standard note directly — call `export_episode_markdown` with `dialect` set to match the user's PKM (`obsidian`, `logseq`, or `common`) and write the returned text to disk. Use the manual assembly below when the user wants the Q&A and mind-map sections, a trimmed note, or a format the server export does not cover.
 
 Combine all fetched artifacts into a single markdown document using this structure:
 

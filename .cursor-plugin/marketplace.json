@@ -1,0 +1,13 @@
+{
+  "name": "podwise",
+  "owner": {
+    "name": "Podwise"
+  },
+  "plugins": [
+    {
+      "name": "podwise",
+      "source": "./",
+      "description": "Search, summarize, transcribe and extract insights from podcasts via the Podwise MCP server."
+    }
+  ]
+}
