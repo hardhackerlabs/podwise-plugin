@@ -10,6 +10,7 @@
         "displayName": "Podwise",
         "shortDescription": "Search, summarize and learn from podcasts.",
         "logo": "./assets/logo.png",
+        "composerIcon": "./assets/composer-icon.png",
         "category": "Productivity"
       }
     }

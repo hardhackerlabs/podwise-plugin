@@ -94,6 +94,17 @@ podwise-plugin/
 
 The MCP definition is intentionally duplicated as `mcp.json` (portable / Codex) and `.mcp.json` (Claude Code default). Keep the two files identical.
 
+## Brand assets
+
+Directory listings use two square images declared in `plugins/podwise/plugin.json` under `extensions.com.openai.interface`:
+
+| Asset | File | Size | Notes |
+| --- | --- | --- | --- |
+| Logo | `assets/logo.png` | 1024×1024 | Square, PNG, ≤5 MiB |
+| Composer icon | `assets/composer-icon.png` | 256×256 | Square, PNG, shown in the chat composer |
+
+Brand color is `#7948E8`.
+
 ## License
 
 [MIT](./LICENSE) © Podwise
