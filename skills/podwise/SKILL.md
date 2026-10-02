@@ -1,6 +1,6 @@
 ---
 name: podwise
-description: "Podcast knowledge workflows powered by the Podwise MCP server: search podcasts and episodes by keyword, monitor followed shows for new releases, find popular episodes, ask questions and extract insights from transcript content, process Podwise episode URLs, YouTube videos, Xiaoyuzhou links, and local audio or video files to retrieve transcripts, summaries, chapters, Q&A, mind maps, highlights, and keywords — plus catch up on your backlog, refine your listening taste, generate weekly recaps, export episode notes to PKM tools, research topics across podcasts, debate episode ideas, and generate language learning cards. Use when the user wants to find, summarize, transcribe, or extract insights from any podcast or audio content, or manage their listening library."
+description: "Podcast workflows for Podwise accounts, using the Podwise MCP server: search podcasts and episodes, follow shows and see their new releases, read AI summaries, chapters, highlights, Q&A, mind maps and transcripts of episodes, and ask questions answered from podcast transcripts. Includes guided workflows to catch up on a backlog, write a weekly recap, take episode notes, research a topic across podcasts, debate the ideas in an episode, and build language-learning cards. Use when the user asks about podcasts, podcast episodes, or their Podwise library."
 version: 1.0.0
 homepage: https://podwise.ai
 metadata:

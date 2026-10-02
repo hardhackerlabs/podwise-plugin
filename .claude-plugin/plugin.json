@@ -2,7 +2,7 @@
   "name": "podwise",
   "displayName": "Podwise",
   "version": "1.0.0",
-  "description": "Search, summarize, transcribe and extract insights from podcasts via the Podwise MCP server.",
+  "description": "Search, summarize and extract insights from podcasts in your Podwise library via the Podwise MCP server.",
   "author": {
     "name": "Podwise",
     "url": "https://podwise.ai"

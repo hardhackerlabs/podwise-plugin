@@ -1,7 +1,7 @@
 {
   "name": "podwise",
   "version": "1.0.0",
-  "description": "Search, summarize, transcribe and extract insights from podcasts via the Podwise MCP server.",
+  "description": "Search, summarize and extract insights from podcasts in your Podwise library via the Podwise MCP server.",
   "author": {
     "name": "Podwise",
     "url": "https://podwise.ai"
@@ -15,7 +15,7 @@
   "interface": {
     "displayName": "Podwise",
     "shortDescription": "Search and summarize podcasts",
-    "longDescription": "Podwise turns podcast episodes into transcripts, summaries, chapters, Q&A, mind maps and clips. This plugin bundles the Podwise agent skill with the remote Podwise MCP server, so you can catch up on your backlog, generate weekly recaps, research topics across shows, export episode notes to your PKM, and build language-learning cards — all from natural language.",
+    "longDescription": "Podcast workflows for Podwise accounts, using the Podwise MCP server: search podcasts and episodes, follow shows and see their new releases, read AI summaries, chapters, highlights, Q&A, mind maps and transcripts of episodes, and ask questions answered from podcast transcripts. Includes guided workflows to catch up on a backlog, write a weekly recap, take episode notes, research a topic across podcasts, debate the ideas in an episode, and build language-learning cards. Use when the user asks about podcasts, podcast episodes, or their Podwise library.",
     "developerName": "Podwise",
     "category": "Productivity",
     "websiteURL": "https://podwise.ai",
