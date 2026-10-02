@@ -9,6 +9,7 @@
   },
   "homepage": "https://podwise.ai",
   "repository": "https://github.com/hardhackerlabs/podwise-plugin",
+  "privacyPolicyUrl": "https://podwise.ai/privacy",
   "license": "MIT",
   "keywords": ["podcast", "transcript", "summary", "mcp"],
   "mcpServers": "./.mcp.json"
