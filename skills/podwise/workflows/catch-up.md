@@ -5,7 +5,7 @@ Use this skill to process a backlog of new podcast episodes in one pass. It comb
 ## Goals
 
 1. Verify the Podwise MCP connection.
-2. Load `taste.md` if it exists, to personalize triage priority.
+2. Load the listener context from MCP data to personalise triage priority.
 3. Fetch unlistened episodes from followed podcasts for the past 7 days.
 4. Triage each episode: assign a priority tier based on the user's interests.
 5. For Tier 1 episodes, fetch AI summaries and highlights automatically.
@@ -16,12 +16,11 @@ Use this skill to process a backlog of new podcast episodes in one pass. It comb
 
 Call `get_me`. If the Podwise tools are unavailable or return an authentication error, stop and follow [../references/installation.md](../references/installation.md) before continuing.
 
-## Step 2: Load the Listener Taste
+## Step 2: Build the Listener Context
 
-Look for `taste.md` in the current working directory.
+Load [../references/listener-context.md](../references/listener-context.md) and derive the **Core Interest Areas**, **Shows to Prioritize**, and **Shows to Deprioritize** from the user's MCP data. Use them to guide triage scoring in Step 4.
 
-- If found, read it silently. Use the **Core Interest Areas**, **Shows to Prioritize**, and **Shows to Deprioritize** sections to guide triage scoring in Step 4.
-- If not found, proceed without personalization and note at the top of the output: *"No taste.md found — run `refine-taste` to get personalized triage."*
+If the MCP data yields no usable signal (for example, a brand-new account), skip personalisation and note at the top of the output: *"No listening history yet — triage is not personalised."*
 
 ## Step 3: Fetch New Episodes
 
@@ -50,7 +49,7 @@ The episode is from a show the user follows actively but did not prioritize, or 
 **Tier 3 — Low Urgency**
 The episode comes from a **Shows to Deprioritize** show, or the topic has no clear overlap with the user's interests. List these briefly at the bottom of the digest so the user can acknowledge and dismiss them.
 
-If no `taste.md` is loaded, assign all episodes to Tier 2 and note that personalised triage is unavailable.
+If the listener context could not be derived, assign all episodes to Tier 2 and note that personalised triage is unavailable.
 
 ## Step 5: Fetch AI Outputs for Tier 1 Episodes
 
@@ -120,7 +119,7 @@ Always confirm before calling `process_episode`.
 - If the combined result after filtering is fewer than 5 episodes, inform the user that their backlog is already clear — their followed podcasts have no unlistened episodes in this window.
 - If `get_episode_summary` fails because an episode is not processed, include it in the digest with its title, podcast name, and "not yet processed" — give the user the episode link and ask if they want to process it before fetching the summary.
 - If the user has no followed podcasts, stop and ask them to follow some shows in Podwise before running catch-up.
-- If `taste.md` is missing, note at the top of the digest: *"Run `refine-taste` to get personalised triage."*
+- If the listener context could not be derived, note at the top of the digest: *"No listening history yet — triage is not personalised."*
 
 ## Output Contract
 

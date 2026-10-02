@@ -59,17 +59,11 @@ If the tools are missing or `get_me` fails, the server is not connected or not a
 
 - **Browser does not open**: copy the printed authorization URL and open it manually.
 - **Authorize again / revoke**: use the host's MCP menu (for Claude Code, `/mcp`).
-- **Remote / SSH / headless machines**: Claude Code's native HTTP MCP OAuth uses a loopback (`localhost`) callback, which cannot complete when the browser runs on a different machine than Claude Code. Bridge the remote server through a local stdio proxy instead:
-
-  ```bash
-  npx -y mcp-remote https://mcp.podwise.ai/mcp
-  ```
-
-  Configure this command as a stdio MCP server, then authorize through the proxy.
+- **Remote / SSH / headless machines**: the host's HTTP MCP OAuth uses a loopback (`localhost`) callback, which cannot complete when the browser runs on a different machine. Use a connection method supported by your host, or see the troubleshooting docs at https://docs.podwise.ai. Do not run third-party proxy commands or paste terminal commands to work around authentication.
 
 ## Plans and limits
 
-- Some capabilities require a **Podwise Pro or Enterprise** plan. If a tool returns a plan-required error, relay the upgrade link to the user; do not retry.
+- Some capabilities require a **Podwise Pro or Enterprise** plan. If a tool returns a plan-required error, explain that the feature is not available on the user's current plan and point them to the plans information at https://podwise.ai; do not retry.
 - `ask_podwise` counts against the **Ask quota**.
 - `process_episode`, `complete_audio_upload`, and audio processing consume **AI processing credits** (based on duration).
 

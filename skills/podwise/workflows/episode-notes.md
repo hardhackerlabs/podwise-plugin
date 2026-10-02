@@ -9,38 +9,32 @@ Use this skill to turn a single processed episode into a well-structured, portab
 3. Ensure the episode is processed; if not, ask for confirmation before processing.
 4. Fetch all available AI artifacts for the episode.
 5. Assemble a structured markdown note.
-6. Write the note to a file and guide the user on how to import it into their PKM tool.
+6. Present the note inline and guide the user on how to import it into their PKM tool.
 
 ## Step 1: Check the Environment
 
 Call `get_me`. If the Podwise tools are unavailable or return an authentication error, stop and follow [../references/installation.md](../references/installation.md) before continuing.
 
-## Step 2: Load the Listener Taste
+## Step 2: Build the Listener Context
 
-Look for `taste.md` in the current working directory.
+Load [../references/listener-context.md](../references/listener-context.md). Then ask once, in a single message, for the PKM tool and output format if the user has not already specified them this session, and use the answers to shape the note format and the export instructions in Step 7.
 
-- If found, read the **PKM tool** and **Output Preferences** fields silently. Use these to shape the note format and to give accurate export instructions in Step 7.
-- If not found, proceed with default formatting and generic export instructions.
+If the user skips the questions, proceed with default formatting and generic export instructions.
 
 ## Step 3: Identify the Target Episode
 
 The user may provide the episode in several ways:
 
-- A Podwise episode URL: `https://app.podwise.ai/dashboard/episodes/{seq}` — extract the trailing integer as `seq`.
-- A YouTube URL: `https://www.youtube.com/watch?v=...`
-- A Xiaoyuzhou URL: `https://www.xiaoyuzhoufm.com/episode/...`
-- A local audio or video file path: `./recording.mp3`
+- A Podwise episode link or seq: `https://app.podwise.ai/dashboard/episodes/{seq}` — extract the trailing integer as `seq`.
 - An episode title or keyword — in this case, search first:
 
   - `search_episodes` with `query: "{title or keyword}"`
 
 Present the results and ask the user to confirm which episode they want before continuing.
 
-If the user provides a YouTube, Xiaoyuzhou, or local file input, that content must be processed before artifacts can be fetched. Move to Step 4 immediately.
-
 ## Step 4: Ensure the Episode Is Processed
 
-For a Podwise episode seq, attempt to fetch the summary to check if processing is complete:
+Attempt to fetch the summary to check if processing is complete:
 
 - `get_episode_summary` with the episode `seq`.
 
@@ -51,13 +45,9 @@ For a Podwise episode seq, attempt to fetch the summary to check if processing i
 
 Only after explicit confirmation, start processing:
 
-- Podwise episode: `process_episode` with the `seq`.
-- YouTube / Xiaoyuzhou: `import_episode` with the URL to get a `seq`, then `process_episode`.
-- Local file: `start_audio_upload` → upload bytes to the returned `uploadUrl` (or hand the `browserUploadUrl` to the user) → `complete_audio_upload`.
+- `process_episode` with the `seq`.
 
 Processing runs asynchronously. Poll `get_episode` with the `seq` until it is done, then continue. The `seq` is used for all subsequent calls.
-
-Supported local file types: `.mp3 .wav .m4a .mp4 .m4v .mov .webm`.
 
 ## Step 5: Fetch All AI Artifacts
 
@@ -65,7 +55,7 @@ Call `get_episode_summary` with the episode `seq`. This single call returns the 
 
 If an individual section is missing, mark that artifact as unavailable in the note rather than stopping the whole skill.
 
-Optionally fetch the transcript if the user specifically requested it or if their taste profile indicates they prefer full transcripts:
+Optionally fetch the transcript if the user specifically requested it or if they said they prefer full transcripts:
 
 - `get_episode_transcript` with the episode `seq` (paginate with `limit` / `offset`).
 
@@ -75,7 +65,7 @@ If the user asked for subtitles, call `export_episode_srt` with the episode `seq
 
 ## Step 6: Assemble the Note
 
-**Rendering options:** The server can render a standard note directly — call `export_episode_markdown` with `dialect` set to match the user's PKM (`obsidian`, `logseq`, or `common`) and write the returned text to disk. Use the manual assembly below when the user wants the Q&A and mind-map sections, a trimmed note, or a format the server export does not cover.
+**Rendering options:** The server can render a standard note directly — call `export_episode_markdown` with `dialect` set to match the user's PKM (`obsidian`, `logseq`, or `common`) and present the returned text. Use the manual assembly below when the user wants the Q&A and mind-map sections, a trimmed note, or a format the server export does not cover.
 
 Combine all fetched artifacts into a single markdown document using this structure:
 
@@ -139,22 +129,17 @@ Rules for assembling the note:
 - Keep the Summary section as returned without paraphrasing or shortening it.
 - Highlights should remain verbatim — do not rewrite them.
 - If the mind map returns structured data rather than plain text, convert it to a nested markdown bullet list before inserting it.
-- If the user's taste profile specifies a preferred output format (bullet points vs prose), apply it only to synthesized sections — do not alter verbatim artifacts.
+- If the user specified a preferred output format (bullet points vs prose), apply it only to synthesized sections — do not alter verbatim artifacts.
 
-## Step 7: Write the File and Guide Export
+## Step 7: Deliver the Note and Guide Export
 
-Name the file using the pattern: `{podcast-name}-{episode-slug}-notes.md`
+Present the note inline by default. Only if the host has a filesystem and the user explicitly asks for a file, name it `{podcast-name}-{episode-slug}-notes.md` (lowercase, spaces to hyphens, special characters stripped), write it to a path the user specifies, and confirm the path.
 
-Slugify by lowercasing, replacing spaces with hyphens, and stripping special characters. Example:
-`lex-fridman-podcast-elon-musk-notes.md`
-
-Write the file to the current working directory unless the user specifies another path.
-
-If the user's PKM tool is Notion or Readwise and the integration is connected in Podwise settings, you may offer to push directly:
+Only if the user explicitly asks to push to their PKM and the integration is connected in Podwise settings, call:
 
 - `send_episode` with the `seq` and `target: "notion"` or `target: "reader"`.
 
-Otherwise, tell the user where the file was saved and provide import instructions based on their PKM tool from the taste profile:
+Otherwise, provide import instructions based on the user's PKM tool:
 
 **Notion**
 > Drag the `.md` file into any Notion page, or use Notion's "Import" option (File → Import → Markdown & CSV). The headings will map to Notion's heading blocks automatically.
@@ -168,23 +153,22 @@ Otherwise, tell the user where the file was saved and provide import instruction
 **Readwise**
 > Use Readwise's manual highlight import or the Readwise Reader upload feature. Note that Readwise is optimised for highlights rather than full notes — consider importing just the Highlights section.
 
-**No PKM tool in taste profile / unknown**
-> The note is saved as a plain markdown file at `{path}`. You can open it in any text editor, import it into most note-taking apps, or keep it as a standalone reference.
+**No PKM tool in listener context / unknown**
+> The note is shown above as Markdown. You can copy it into any text editor or note-taking app.
 
 ## Common Failure Cases
 
-- If the episode search returns no results, ask the user to try a different title, keyword, or to paste the episode URL directly.
-- If processing fails due to an unsupported file format, stop and list the supported extensions: `.mp3 .wav .m4a .mp4 .m4v .mov .webm`.
-- If the user provides a URL that is neither a valid Podwise, YouTube, Xiaoyuzhou, nor local path, tell them the URL format is not recognised and ask for a supported input.
+- If the episode search returns no results, ask the user to try a different title, keyword, or to paste the episode link directly.
+- If the user provides a link that is not a Podwise episode link, tell them the format is not recognised and ask for a Podwise episode link or title.
 - If `get_episode_summary` still fails after a successful process, tell the user that processing may still be completing and to try again in a few minutes.
-- If a note file with the same name already exists, ask the user whether to overwrite it or save with a timestamp suffix.
+- If a file is written and one with the same name already exists, ask the user whether to overwrite it or save with a timestamp suffix.
 
 ## Output Contract
 
-Produce exactly one markdown note file per episode.
+Produce exactly one markdown note per episode, presented inline by default.
 
-The note must include at minimum: Summary, Highlights, and the source URL. All other sections are included when available.
+The note must include at minimum: Summary, Highlights, and the source link. All other sections are included when available.
 
 The transcript is never included in the note by default — offer it separately only if requested.
 
-Always confirm the file path after writing and always provide PKM import instructions.
+Always provide PKM import instructions. Confirm the path only if a file was explicitly requested and written.

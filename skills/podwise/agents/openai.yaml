@@ -3,7 +3,7 @@ interface:
   short_description: "Search, summarize and learn from podcasts."
   brand_color: "#7948E8"
 policy:
-  allow_implicit_invocation: true
+  allow_implicit_invocation: false
 dependencies:
   tools:
     - type: "mcp"

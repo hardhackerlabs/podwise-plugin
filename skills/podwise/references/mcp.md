@@ -118,22 +118,22 @@ Start AI processing (transcription, summary, outline) for an episode that is not
 
 **Consumes AI processing credits. Always confirm with the user before calling.** Processing runs asynchronously — poll `get_episode` until it is done.
 
-> `process_episode` only accepts an episode that already exists in Podwise. To bring in a YouTube, Xiaoyuzhou, or local file, see **import_episode** and the upload tools below.
+> `process_episode` only accepts an episode that already exists in Podwise. To bring in a user-provided external link or local file, see **import_episode** and the upload tools below.
 
 ### import_episode
 
-Import a single episode from Xiaoyuzhou or YouTube and return its `seq`. Importing does **not** start processing — call `process_episode` afterwards (with confirmation).
+Import a single episode the user has explicitly provided, from a supported source (Xiaoyuzhou or YouTube), and return its `seq`. Only use a link the user gave you in this conversation; never construct, guess or fetch arbitrary URLs. Importing does **not** start processing — call `process_episode` afterwards (with confirmation).
 
-- `url` (Xiaoyuzhou episode URL or YouTube URL, required)
+- `url` (a Xiaoyuzhou or YouTube link the user provided, required)
 - `private` (boolean, default false)
 
 ### start_audio_upload / complete_audio_upload
 
-Process a **local** audio or video file.
+Process a local audio or video file the user explicitly wants to upload.
 
-1. `start_audio_upload` with `fileName` and `contentType` (e.g. `audio/mpeg`). It returns an `uploadId`, an `uploadUrl` + `uploadHeaders` (PUT the bytes directly with `curl`), and a `browserUploadUrl` (for the user to upload in a browser).
-2. Upload the file bytes to `uploadUrl` with the given headers, or hand the `browserUploadUrl` to the user.
-3. `complete_audio_upload` with the `uploadId` and optional `title`, `description`, `speakers`, `keywords`, `durationSeconds`.
+1. `start_audio_upload` with `fileName` and `contentType` (e.g. `audio/mpeg`). It returns an `uploadId` and a `browserUploadUrl`.
+2. Give the `browserUploadUrl` to the user and let them upload the file through their browser. The agent must not upload files, run shell or network commands, or handle upload credentials on the user's behalf.
+3. After the user confirms the upload, call `complete_audio_upload` with the `uploadId` and optional `title`, `description`, `speakers`, `keywords`, `durationSeconds`.
 
 **Consumes AI processing credits on completion. Confirm with the user first.**
 
@@ -206,13 +206,13 @@ List the translations of an episode and the status of each. Poll this, then read
 - `list_clips` — clips of an episode (`episodeSeq`), or the user's recent clips (`page`, `pageSize`).
 - `delete_clip` — permanently delete one of the user's clips. `clipId`. **Confirm with the user first.**
 - `export_clips_markdown` — all ready clips of an episode as one Markdown document. `episodeSeq`.
-- `send_clips` — send one clip (`clipId`) or all ready clips (`episodeSeq`) to `notion` or `readwise`. Integration must be connected in Podwise settings.
+- `send_clips` — send one clip (`clipId`) or all ready clips (`episodeSeq`) to `notion` or `readwise`. Only when the user explicitly asks; the integration must be connected in Podwise settings.
 
 ### Export
 
 - `export_episode_markdown` — summary, outline, and transcript of a transcribed episode as Markdown. `seq`; optional `language`, `dialect` (`common` | `obsidian` | `logseq`), `mixOutlines`, `mixWithOriginLanguage`. Returns the note text — the agent writes the file to disk.
 - `export_episode_srt` — transcript of a transcribed episode as SRT subtitles. `seq`; optional `language` (translation), `mixWithOriginLanguage` (bilingual: keep the original alongside the translation), `translationFirst` (bilingual only: put the translation above the original). Short exports return inline; long ones return a download link valid for 10 minutes — share it with the user.
-- `send_episode` — send summary and notes to `notion` or `reader` (`target`). Optional `language`, `mixOutlines`, `mixWithOriginLanguage`; Reader-only: `location` (`new` | `later` | `archive`), `shownotes`, `mindmap`; Notion-only: `transcripts` (default true).
+- `send_episode` — send summary and notes to `notion` or `reader` (`target`). Only when the user explicitly asks. Optional `language`, `mixOutlines`, `mixWithOriginLanguage`; Reader-only: `location` (`new` | `later` | `archive`), `shownotes`, `mindmap`; Notion-only: `transcripts` (default true).
 
 Integration must already be connected in Podwise settings.
 
@@ -220,7 +220,7 @@ Integration must already be connected in Podwise settings.
 
 ### Enterprise tools
 
-`enterprise_process_audio`, `enterprise_get_status`, `enterprise_get_result`, `enterprise_query_results`, `enterprise_translate`, `enterprise_get_translation`, `enterprise_export`, `enterprise_get_usage` are for Enterprise-plan API usage. If a tool reports that a Pro or Enterprise plan is required, relay the upgrade link to the user instead of retrying.
+`enterprise_process_audio`, `enterprise_get_status`, `enterprise_get_result`, `enterprise_query_results`, `enterprise_translate`, `enterprise_get_translation`, `enterprise_export`, `enterprise_get_usage` are for Enterprise-plan API usage. If a tool reports that a Pro or Enterprise plan is required, explain that the feature is unavailable on the user's current plan instead of retrying.
 
 ---
 
@@ -256,8 +256,8 @@ Integration must already be connected in Podwise settings.
 | Follow / unfollow a show | `set_podcast_follow` |
 | Mark an episode read | `set_episode_read` |
 | Process a Podwise episode | confirm → `process_episode` |
-| Import a YouTube / Xiaoyuzhou episode | `import_episode` → confirm → `process_episode` |
-| Transcribe a local file | confirm → `start_audio_upload` → upload → `complete_audio_upload` |
+| Import a user-provided YouTube / Xiaoyuzhou link | `import_episode` → confirm → `process_episode` |
+| Transcribe a user-uploaded file | confirm → `start_audio_upload` → user uploads in browser → `complete_audio_upload` |
 | Translate an episode | `translate_episode` → `list_episode_translations` |
 | Export episode notes to Notion / Readwise | `send_episode` |
 | Export episode notes as Markdown / Obsidian / Logseq | `export_episode_markdown` |
@@ -272,7 +272,7 @@ Integration must already be connected in Podwise settings.
 
 - **Tools unavailable / auth error**: the MCP server is not connected or not authorized. Load [installation.md](installation.md).
 - **`get_episode_summary` says "not processed"**: run `process_episode` first (confirm — credits are consumed).
-- **"Pro or Enterprise plan required"**: report it and relay the upgrade link. Do not retry or fabricate output.
+- **"Pro or Enterprise plan required"**: report it and explain the feature is unavailable on the current plan. Do not retry or fabricate output.
 - **`ask_podwise` returns a quota error**: report it directly. Do not fabricate an answer.
 - **SRT export returns a download link**: long transcripts are not sent inline — share the link with the user (valid for 10 minutes).
 - **`process_episode` / `complete_audio_upload` run without confirmation**: always wrong — both consume quota.

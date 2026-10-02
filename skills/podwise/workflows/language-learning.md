@@ -15,44 +15,33 @@ Use this skill to mine a podcast transcript for language learning material. It p
 
 Call `get_me`. If the Podwise tools are unavailable or return an authentication error, stop and follow [../references/installation.md](../references/installation.md) before continuing.
 
-## Step 2: Load the Listener Taste
+## Step 2: Build the Listener Context
 
-Look for `taste.md` in the current working directory.
-
-- If found, read the **Languages** field under **Listening Style** silently. Use the learning language and native language to pre-fill Step 4 questions and skip any that are already known.
-- If found, also read **Output Preferences** to shape the default delivery format recommendation in Step 8.
-- If not found, ask all setup questions in full.
+Load [../references/listener-context.md](../references/listener-context.md). The learner's target language and native language cannot be inferred from Podwise data, so always ask them in Step 4.
 
 ## Step 3: Identify the Target Episode
 
 The user may provide the episode as:
 
-- A Podwise episode URL: `https://app.podwise.ai/dashboard/episodes/{seq}` — extract the trailing integer as `seq`.
-- A YouTube or Xiaoyuzhou URL.
-- A local audio or video file path.
+- A Podwise episode link or seq: `https://app.podwise.ai/dashboard/episodes/{seq}` — extract the trailing integer as `seq`.
 - An episode title or keyword — search first:
 
   - `search_episodes` with `query: "{title or keyword}"`.
 
 Present the results and ask the user to confirm which episode before continuing.
 
-If the user provided a YouTube URL, Xiaoyuzhou URL, or local file path, process it first to obtain a valid Podwise episode `seq`. Ask for confirmation before processing:
+If the episode is not yet processed, ask for confirmation before processing:
 
 > "This episode hasn't been processed yet. Processing will use one credit from your Podwise quota. Proceed?"
 
-Only after explicit confirmation:
-
-- YouTube / Xiaoyuzhou: `import_episode` to get a `seq`, then `process_episode`.
-- Local file: `start_audio_upload` → upload bytes to the returned `uploadUrl` (or hand the `browserUploadUrl` to the user) → `complete_audio_upload`.
-
-Poll `get_episode` until processing is done, then proceed to Step 4.
+Only after explicit confirmation, call `process_episode` with the `seq`. Poll `get_episode` until processing is done, then proceed to Step 4.
 
 ## Step 4: Set Up the Learning Context
 
-If any information is not already in the taste profile, ask the following questions — all at once, not one by one:
+If any information is not already known from this session, ask the following questions — all at once, not one by one:
 
-1. **Learning language**: Which language are you studying in this episode? (e.g. English, Japanese, Mandarin) — skip if already known from taste.md
-2. **Native language**: What is your native language? (Cards will be translated into this language.) — skip if already known from taste.md
+1. **Learning language**: Which language are you studying in this episode? (e.g. English, Japanese, Mandarin)
+2. **Native language**: What is your native language? (Cards will be translated into this language.)
 3. **Level**: How would you rate your level in the learning language? (Beginner / Intermediate / Advanced)
 4. **Focus**: What type of material do you want to prioritise?
    - Everyday vocabulary (common words used in natural conversation)
@@ -99,7 +88,7 @@ For each extracted phrase, produce a card with these fields:
 | Field | Content |
 |---|---|
 | **Front** | The phrase or vocabulary item in the learning language |
-| **Back** | Translation into the user's native language (as specified in Step 4 or taste.md) |
+| **Back** | Translation into the user's native language (as specified in Step 4) |
 | **Context** | The full sentence from the transcript where this phrase appeared |
 | **Note** | One sentence explaining usage, register, or a common mistake to avoid |
 | **Source** | Episode title + podcast name (for reference) |
@@ -114,23 +103,20 @@ Example card:
 
 ## Step 8: Deliver the Cards
 
-Based on your output preferences, I've recommended a format for you — but you're free to choose any of the three:
+Offer the three formats and let the user choose:
 
-1. **Inline review** — show the cards one by one in chat for an immediate study session
+1. **Inline review** — show the cards one by one in chat for an immediate study session (default)
 2. **Anki import file** — produce a `.txt` file in Anki's tab-separated format, ready to import via `File → Import`
 3. **CSV file** — produce a `.csv` with column headers: Front, Back, Context, Note, Source
 
-**Default recommendation order** (shaped by Output Preferences):
-- If `Preferred format = bullet points` or `Preferred summary length = short` → recommend **CSV** first
-- If `Preferred format = prose / mix` → recommend **inline review** first
-- Anki is always available as a third option
+Default to **inline review** unless the user asks for a file.
 
 **For inline review**, show cards one at a time:
 > Here's card 1 of {N}:
 > **{phrase}**
 > Ready to see the translation and context? (Reply anything to continue.)
 
-**For Anki import**, write the file as `language-cards-{episode-slug}.txt` using this format:
+**For Anki import**, when the user asks, produce the content in this format:
 ```
 #separator:tab
 #html:false
@@ -139,12 +125,12 @@ Based on your output preferences, I've recommended a format for you — but you'
 {Front}\t{Back}\t{Context}\t{Note}
 ```
 
-**For CSV**, write the file as `language-cards-{episode-slug}.csv` with a header row:
+**For CSV**, when the user asks, produce this header row plus one row per card:
 ```
 Front,Back,Context,Note,Source
 ```
 
-Write files to the current working directory and confirm the path.
+Present the content inline by default. Only if the host has a filesystem and the user explicitly asks for a file, write it as `language-cards-{episode-slug}.txt` / `.csv` to a path the user specifies and confirm the path.
 
 ## Common Failure Cases
 
@@ -162,6 +148,6 @@ Every card must be grounded in an actual transcript sentence — never invented.
 
 Inline review delivers cards one at a time, waiting for the user to advance.
 
-Anki and CSV files are written to disk and the path confirmed.
+Anki and CSV content is delivered inline unless the user explicitly asks for a file.
 
 The card count never exceeds the user's stated limit or 40, whichever is lower.

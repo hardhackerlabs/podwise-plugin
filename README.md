@@ -21,7 +21,6 @@ The skill routes your intent automatically:
 
 | Workflow | What it does |
 | --- | --- |
-| **refine-taste** | Build your listener profile for personalised outputs |
 | **catch-up** | Catch up on missed episodes from shows you follow |
 | **weekly-recap** | Generate a weekly listening recap with highlights |
 | **episode-notes** | Export episode summaries and highlights to your PKM |
@@ -70,10 +69,7 @@ Then add this to your MCP configuration:
 - Network access to `https://mcp.podwise.ai/mcp`.
 - Some capabilities require a Podwise Pro or Enterprise plan.
 
-> **Remote / SSH note:** Claude Code's native HTTP MCP OAuth uses a loopback callback, which does not work when Claude Code runs on a machine different from your browser. In that case, bridge the remote server through stdio:
-> ```bash
-> npx -y mcp-remote https://mcp.podwise.ai/mcp
-> ```
+> **Remote / SSH note:** the host's HTTP MCP OAuth uses a loopback callback, which does not work when the host runs on a machine different from your browser. Use a connection method supported by your host, or see the troubleshooting docs at https://docs.podwise.ai. Do not run third-party proxy commands to work around authentication.
 
 ## Repository layout
 
