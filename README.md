@@ -6,6 +6,8 @@
 
 Turn podcast episodes into AI-powered insights from inside Claude Code and Codex. This plugin bundles the **Podwise Agent Skill** with the **remote Podwise MCP server** (`https://mcp.podwise.ai/mcp`), so installing the plugin wires everything up.
 
+In short: **a podcast MCP server for AI agents.** Point any MCP client at `https://mcp.podwise.ai/mcp` and it can search podcasts and episodes, pull a full transcript, read the AI summary, chapters, highlights, Q&A and mind map, ask questions across transcripts, translate an episode, clip key moments, and export notes as Markdown or SRT.
+
 Podwise transforms hours of audio into transcripts, summaries, outlines, Q&A, mind maps and clips. The skill teaches your agent how to combine those tools into repeatable workflows.
 
 ## What's included
@@ -28,6 +30,27 @@ The skill routes your intent automatically:
 | **episode-debate** | Challenge and stress-test ideas from an episode |
 | **language-learning** | Generate language flashcards from a transcript |
 | **discover** | Get personalised podcast recommendations |
+
+## MCP server and tools
+
+**Endpoint:** `https://mcp.podwise.ai/mcp` — Streamable HTTP, OAuth 2.1. No API key lives in this repository.
+Listed in [Anthropic's plugin directory](https://claude.ai) and on the official MCP Registry as
+`io.github.hardhackerlabs/podwise` (see [`server.json`](./server.json)).
+
+38 tools, grouped:
+
+| Group | Tools |
+| --- | --- |
+| Account | `get_me` |
+| Search and discovery | `search_episodes`, `search_podcasts`, `get_popular_episodes` |
+| Library and history | `list_followed_episodes`, `list_followed_podcasts`, `list_podcast_episodes`, `list_my_episodes`, `set_podcast_follow`, `set_episode_read` |
+| Processing and import | `process_episode`, `import_episode`, `start_audio_upload`, `complete_audio_upload` |
+| Artifacts and Q&A | `get_episode`, `get_episode_summary`, `get_episode_transcript`, `ask_podwise`, `get_ask_history`, `translate_episode`, `list_episode_translations` |
+| Clips | `create_clip`, `get_clip`, `list_clips`, `delete_clip`, `export_clips_markdown`, `send_clips` |
+| Export | `export_episode_markdown`, `export_episode_srt`, `send_episode` |
+| Enterprise | `enterprise_process_audio`, `enterprise_get_status`, `enterprise_get_result`, `enterprise_query_results`, `enterprise_translate`, `enterprise_get_translation`, `enterprise_export`, `enterprise_get_usage` |
+
+Full parameter reference: [`skills/podwise/references/mcp.md`](./skills/podwise/references/mcp.md).
 
 ## Install
 
@@ -85,6 +108,7 @@ podwise-plugin/                            # this repository is the plugin (sour
 ├── .agents/plugins/marketplace.json       # Codex marketplace
 ├── plugin.json                            # Portable Agent Plugins manifest
 ├── mcp.json / .mcp.json                   # Remote MCP server config
+├── server.json                            # MCP registry manifest (official registry, aggregators)
 ├── skills/podwise/                        # The Podwise skill
 │   ├── SKILL.md
 │   ├── references/

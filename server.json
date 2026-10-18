@@ -1,0 +1,19 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.hardhackerlabs/podwise",
+  "title": "Podwise",
+  "description": "Podcast knowledge for AI agents: search episodes, pull transcripts and ask questions.",
+  "version": "1.0.0",
+  "websiteUrl": "https://podwise.ai",
+  "repository": {
+    "url": "https://github.com/hardhackerlabs/podwise-plugin",
+    "source": "github",
+    "id": "hardhackerlabs/podwise-plugin"
+  },
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://mcp.podwise.ai/mcp"
+    }
+  ]
+}
