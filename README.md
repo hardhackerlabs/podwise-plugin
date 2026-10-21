@@ -1,10 +1,11 @@
 # Podwise Plugin
 
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-plugin-6B4FBB)](https://code.claude.com/docs/en/plugins)
+[![Cursor](https://img.shields.io/badge/Cursor-plugin-000000)](https://cursor.com/marketplace)
 [![Codex](https://img.shields.io/badge/Codex-plugin-000000)](https://developers.openai.com/codex)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 
-Turn podcast episodes into AI-powered insights from inside Claude Code and Codex. This plugin bundles the **Podwise Agent Skill** with the **remote Podwise MCP server** (`https://mcp.podwise.ai/mcp`), so installing the plugin wires everything up.
+Turn podcast episodes into AI-powered insights from inside Claude Code, Cursor and Codex. This plugin bundles the **Podwise Agent Skill** with the **remote Podwise MCP server** (`https://mcp.podwise.ai/mcp`), so installing the plugin wires everything up.
 
 In short: **a podcast MCP server for AI agents.** Point any MCP client at `https://mcp.podwise.ai/mcp` and it can search podcasts and episodes, pull a full transcript, read the AI summary, chapters, highlights, Q&A and mind map, ask questions across transcripts, translate an episode, clip key moments, and export notes as Markdown or SRT.
 
@@ -62,6 +63,19 @@ Full parameter reference: [`skills/podwise/references/mcp.md`](./skills/podwise/
 ```
 
 Then authenticate the MCP server when prompted (OAuth runs in your browser via `/mcp`).
+
+### Cursor
+
+Install from the Cursor Marketplace (**Customize → Plugins**, search "Podwise") or from
+[cursor.directory](https://cursor.directory). Every listed plugin is open source and reviewed by Cursor.
+
+Until the listing is live, load the plugin locally:
+
+```bash
+git clone https://github.com/hardhackerlabs/podwise-plugin ~/.cursor/plugins/local/podwise
+```
+
+Restart Cursor, enable **Podwise** under **Customize → Plugins**, then complete the MCP OAuth flow when prompted.
 
 ### Codex / ChatGPT
 
