@@ -5,11 +5,9 @@
 [![Codex](https://img.shields.io/badge/Codex-plugin-000000)](https://developers.openai.com/codex)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 
-Turn podcast episodes into AI-powered insights from inside Claude Code, Cursor and Codex. This plugin bundles the **Podwise Agent Skill** with the **remote Podwise MCP server** (`https://mcp.podwise.ai/mcp`), so installing the plugin wires everything up.
+Turn podcast episodes into AI-powered insights from inside Claude Code, Cursor, Codex and ChatGPT. This plugin bundles the **Podwise Agent Skill** with the **remote Podwise MCP server** (`https://mcp.podwise.ai/mcp`), so installing the plugin wires everything up.
 
-In short: **a podcast MCP server for AI agents.** Point any MCP client at `https://mcp.podwise.ai/mcp` and it can search podcasts and episodes, pull a full transcript, read the AI summary, chapters, highlights, Q&A and mind map, ask questions across transcripts, translate an episode, clip key moments, and export notes as Markdown or SRT.
-
-Podwise transforms hours of audio into transcripts, summaries, outlines, Q&A, mind maps and clips. The skill teaches your agent how to combine those tools into repeatable workflows.
+In short: **a podcast MCP server for AI agents.** Point any MCP client at `https://mcp.podwise.ai/mcp` and it can search podcasts and episodes, pull a full transcript, read the AI summary, chapters, highlights, Q&A and mind map, ask questions across transcripts, translate an episode, clip key moments, and export notes as Markdown or SRT. The skill teaches your agent how to combine those tools into repeatable workflows.
 
 ## What's included
 
@@ -34,9 +32,8 @@ The skill routes your intent automatically:
 
 ## MCP server and tools
 
-**Endpoint:** `https://mcp.podwise.ai/mcp` — Streamable HTTP, OAuth 2.1. No API key lives in this repository.
-Listed in [Anthropic's plugin directory](https://claude.ai) and on the official MCP Registry as
-`io.github.hardhackerlabs/podwise` (see [`server.json`](./server.json)).
+**Endpoint:** `https://mcp.podwise.ai/mcp` — Streamable HTTP, OAuth 2.0. No API key lives in this repository.
+Listed on the official MCP Registry as `io.github.hardhackerlabs/podwise` (see [`server.json`](./server.json)).
 
 38 tools, grouped:
 
@@ -66,18 +63,9 @@ Then authenticate the MCP server when prompted (OAuth runs in your browser via `
 
 ### Cursor
 
-**Full plugin (skill + MCP server)** — clone it into Cursor's local plugins directory:
+Open **Customize → Plugins**, search for **Podwise** in the Cursor Marketplace and install it. Then complete the MCP OAuth flow when prompted.
 
-```bash
-git clone https://github.com/hardhackerlabs/podwise-plugin ~/.cursor/plugins/local/podwise
-```
-
-Restart Cursor, enable **Podwise** under **Customize → Plugins**, then complete the MCP OAuth flow when prompted.
-
-**MCP server only** — one-click install from [cursor.directory](https://cursor.directory/plugins/podwise).
-
-The plugin is submitted to the Cursor Marketplace and currently in review. Once listed it installs from
-**Customize → Plugins** like any other plugin.
+The MCP server alone is also available as a one-click install from [cursor.directory](https://cursor.directory/plugins/podwise).
 
 ### Codex / ChatGPT
 
@@ -96,17 +84,29 @@ If your agent reads skills directly but does not install plugins, install the sk
 npx skills add hardhackerlabs/podwise-plugin
 ```
 
-Then add this to your MCP configuration:
+Then add the server to your MCP configuration. Use the transport name your client expects — `http` for Claude Code-style clients (as in [`.mcp.json`](./.mcp.json)), `streamable-http` for Agent Plugins clients (as in [`mcp.json`](./mcp.json)):
 
 ```json
 { "mcpServers": { "podwise": { "type": "http", "url": "https://mcp.podwise.ai/mcp" } } }
 ```
 
+## Usage
+
+Once the plugin is installed and authenticated, just ask. For example:
+
+- "Catch me up on this week's podcast episodes"
+- "Summarize this podcast episode: <episode URL>"
+- "Research what podcasts say about <topic>"
+- "Write my weekly listening recap"
+- "Make language-learning cards from this episode's transcript"
+
+The skill checks the connection with `get_me` first, then routes the request to the matching workflow.
+
 ## Requirements
 
 - A Podwise account. The MCP server uses **OAuth 2.0**; no API key is stored in this repository.
 - Network access to `https://mcp.podwise.ai/mcp`.
-- Some capabilities require a Podwise Pro or Enterprise plan.
+- Some capabilities require a Podwise Pro or Enterprise plan; the `enterprise_*` tools are for Enterprise-plan API usage. See [podwise.ai](https://podwise.ai) for plans.
 
 > **Remote / SSH note:** the host's HTTP MCP OAuth uses a loopback callback, which does not work when the host runs on a machine different from your browser. Use a connection method supported by your host, or see the troubleshooting docs at https://docs.podwise.ai. Do not run third-party proxy commands to work around authentication.
 
@@ -123,7 +123,8 @@ podwise-plugin/                            # this repository is the plugin (sour
 │   └── plugin.json                        # Cursor plugin manifest
 ├── .agents/plugins/marketplace.json       # Codex marketplace
 ├── plugin.json                            # Portable Agent Plugins manifest
-├── mcp.json / .mcp.json                   # Remote MCP server config
+├── mcp.json                               # Remote MCP server config (Agent Plugins, streamable-http)
+├── .mcp.json                              # Remote MCP server config (Claude Code and Codex, http)
 ├── server.json                            # MCP registry manifest (official registry, aggregators)
 ├── skills/podwise/                        # The Podwise skill
 │   ├── SKILL.md
@@ -133,18 +134,22 @@ podwise-plugin/                            # this repository is the plugin (sour
 └── assets/
 ```
 
-The MCP definition is duplicated as `mcp.json` (portable / Codex, `streamable-http`) and `.mcp.json` (Claude Code, `http`). Keep the transport type matching each platform.
+The MCP definition is duplicated as `mcp.json` (portable Agent Plugins, `streamable-http`) and `.mcp.json` (referenced by the Claude Code and Codex manifests, `http`). Keep the transport type matching each platform.
 
 ## Brand assets
 
-Directory listings use two square images declared in `plugin.json` under `extensions.com.openai.interface`:
-
-| Asset | File | Size | Notes |
+| Asset | File | Size | Declared in |
 | --- | --- | --- | --- |
-| Logo | `assets/logo.png` | 1024×1024 | Square, PNG, ≤5 MiB |
-| Composer icon | `assets/composer-icon.png` | 256×256 | Square, PNG, shown in the chat composer |
+| Logo | `assets/logo.png` | 1024×1024 PNG | `.cursor-plugin/plugin.json` (`logo`), `.codex-plugin/plugin.json` and `plugin.json` (`interface.logo`) |
+| Composer icon | `assets/composer-icon.png` | 256×256 PNG | `.codex-plugin/plugin.json` and `plugin.json` (`interface.composerIcon`), shown in the chat composer |
 
 Brand color is `#7948E8`.
+
+## Privacy and support
+
+- Privacy policy: https://podwise.ai/privacy
+- Terms of service: https://podwise.ai/terms
+- Support and docs: https://docs.podwise.ai
 
 ## License
 
