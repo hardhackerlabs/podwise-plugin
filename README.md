@@ -63,7 +63,19 @@ Then authenticate the MCP server when prompted (OAuth runs in your browser via `
 
 ### Cursor
 
-Open **Customize → Plugins**, search for **Podwise** in the Cursor Marketplace and install it. Then complete the MCP OAuth flow when prompted.
+Open **Customize → Plugins → Add → From GitHub Repository** and import this repository as a marketplace (use the full URL):
+
+```
+https://github.com/hardhackerlabs/podwise-plugin
+```
+
+Then click **Add** on **podwise** and authenticate the MCP server when prompted (**Customize → Plugins → podwise → Authenticate**).
+
+Once Podwise is listed in the Cursor Marketplace, you can also install it from any agent chat:
+
+```
+/add-plugin podwise
+```
 
 The MCP server alone is also available as a one-click install from [cursor.directory](https://cursor.directory/plugins/podwise).
 
