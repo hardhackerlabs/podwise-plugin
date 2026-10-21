@@ -66,16 +66,18 @@ Then authenticate the MCP server when prompted (OAuth runs in your browser via `
 
 ### Cursor
 
-Install from the Cursor Marketplace (**Customize → Plugins**, search "Podwise") or from
-[cursor.directory](https://cursor.directory). Every listed plugin is open source and reviewed by Cursor.
-
-Until the listing is live, load the plugin locally:
+**Full plugin (skill + MCP server)** — clone it into Cursor's local plugins directory:
 
 ```bash
 git clone https://github.com/hardhackerlabs/podwise-plugin ~/.cursor/plugins/local/podwise
 ```
 
 Restart Cursor, enable **Podwise** under **Customize → Plugins**, then complete the MCP OAuth flow when prompted.
+
+**MCP server only** — one-click install from [cursor.directory](https://cursor.directory/plugins/podwise).
+
+The plugin is submitted to the Cursor Marketplace and currently in review. Once listed it installs from
+**Customize → Plugins** like any other plugin.
 
 ### Codex / ChatGPT
 
