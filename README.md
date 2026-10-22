@@ -4,6 +4,7 @@
 [![Cursor](https://img.shields.io/badge/Cursor-plugin-000000)](https://cursor.com/marketplace)
 [![Codex](https://img.shields.io/badge/Codex-plugin-000000)](https://developers.openai.com/codex)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+[![AllMCPs](https://allmcps.com/api/badge/podwise)](https://allmcps.com/mcp/podwise?verify=414b3636-52f4-4d46-855f-92682c9d7a3b)
 
 Turn podcast episodes into AI-powered insights from inside Claude Code, Cursor, Codex and ChatGPT. This plugin bundles the **Podwise Agent Skill** with the **remote Podwise MCP server** (`https://mcp.podwise.ai/mcp`), so installing the plugin wires everything up.
 
